@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Life Link Preview</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
+<style>
+  /* Layout: a quiet presentation stage. A credit band, the three products as
+     tabs, one control rail for the open product, then the live devices at
+     true relative size on a soft clinic-blue floor. */
+  :root {
+    --bg: #F3F7FC;
+    --floor: #D9E5F8;
+    --surface: #FFFFFF;
+    --ink: #13204A;
+    --muted: #4E5B7A;
+    --line: #DBE4F1;
+    --accent: #2457D6;
+    --track: #EAF0F8;
+    --on: #13204A;
+    --on-ink: #FFFFFF;
+    --metal: #1A1D26;
+    --metal-edge: #474C59;
+    --chrome: #E9EEF5;
+    --chrome-ink: #4E5B7A;
+    --boot: #F3F7FC;
+    --boot-ink: #7C879F;
+    --body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    /* Light only: the products themselves ship a light theme. */
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 500 15px/1.5 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1720px;
+    margin: 0 auto;
+    padding-block: 16px 28px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Credit band */
+  .band {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 32px;
+  }
+  .band > div { min-width: 0; }
+  .eyebrow {
+    margin: 0 0 6px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font: 700 12px/1.3 var(--body);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .secret {
+    padding: 4px 9px;
+    border: 1.5px solid var(--accent);
+    border-radius: 6px;
+    letter-spacing: .18em;
+  }
+  h1 {
+    margin: 0;
+    font: 800 clamp(28px, 3.2vw, 38px)/1.1 var(--body);
+    letter-spacing: -.025em;
+    text-wrap: balance;
+  }
+  .lede { margin: 6px 0 0; color: var(--muted); max-width: 64ch; }
+  .credit {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+  .credit small { font: 600 12px/1.2 var(--body); color: var(--muted); letter-spacing: .04em; }
+  .geotech { font: 800 15px/1 var(--body); letter-spacing: .32em; margin-right: -.32em; }
+
+  /* Product tabs */
+  .products {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .product {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+  .product b { font: 800 17px/1.25 var(--body); }
+  .product span { font: 500 13px/1.35 var(--body); color: var(--muted); }
+  .product:hover { border-color: var(--muted); }
+  .product[aria-selected="true"] { background: var(--on); border-color: var(--on); color: var(--on-ink); }
+  .product[aria-selected="true"] span { color: #B9C8F0; }
+
+  /* Control rail */
+  .rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+    padding: 10px 12px;
+    border-radius: 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+  .group { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .group > span {
+    font: 700 12px/1 var(--body);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .seg { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--track); }
+  .seg button, .btn, select {
+    font: 700 14px/1 var(--body);
+    color: var(--ink);
+    min-height: 36px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .seg button {
+    border: 0;
+    background: transparent;
+    padding: 0 14px;
+    transition: background .2s, color .2s;
+  }
+  .seg button[aria-pressed="true"] { background: var(--on); color: var(--on-ink); }
+  .seg button:disabled { opacity: .45; cursor: default; }
+  select {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%234E5B7A' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center;
+    padding: 0 38px 0 14px;
+    width: 280px;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+  .btn { border: 1px solid var(--line); background: var(--surface); padding: 0 16px; }
+  .btn:hover, select:hover { border-color: var(--muted); }
+  .rail .push { margin-left: auto; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .hint { margin: 0; color: var(--muted); font-size: 14px; }
+  .hint b { color: var(--ink); font-weight: 700; }
+
+  /* Stage */
+  .stage {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 40px;
+    padding: 16px 12px 14px;
+    border-radius: 28px;
+    background: radial-gradient(120% 90% at 50% 100%, var(--floor), transparent 70%);
+    overflow: hidden;
+  }
+  .device { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .device.off {
+    position: absolute;
+    left: -200vw;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .fit { position: relative; }
+  .frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    background: var(--metal);
+    box-shadow:
+      0 0 0 1.5px var(--metal-edge),
+      0 30px 60px -20px rgba(19, 32, 74, .45),
+      0 12px 24px -12px rgba(19, 32, 74, .35);
+  }
+  .phone .frame { padding: 14px; border-radius: 68px; }
+  .phone .frame::before, .phone .frame::after {
+    content: "";
+    position: absolute;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--metal-edge);
+  }
+  .phone .frame::before { left: -4px; top: 180px; height: 64px; box-shadow: 0 84px 0 var(--metal-edge); }
+  .phone .frame::after { right: -4px; top: 220px; height: 100px; }
+  .tablet .frame { padding: 22px; border-radius: 46px; }
+  .browser .frame { padding: 0; border-radius: 14px; background: var(--chrome); box-shadow: 0 0 0 1px var(--line), 0 30px 60px -24px rgba(19, 32, 74, .40), 0 12px 24px -12px rgba(19, 32, 74, .25); }
+  .screen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--boot);
+  }
+  .phone .screen { width: 390px; height: 844px; border-radius: 54px; }
+  .tablet .screen { width: 820px; height: 1180px; border-radius: 26px; }
+  .tablet.landscape .screen { width: 1180px; height: 820px; }
+  .browser .screen { border-radius: 0 0 14px 14px; }
+  .screen iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: transparent;
+  }
+  /* A web page on a phone sits under the status bar and above the home bar. */
+  .phone.web .screen iframe { top: 54px; height: calc(100% - 54px - 28px); }
+  .phone.web .screen { background: #FFFFFF; }
+  .boot {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--boot-ink);
+  }
+  .boot strong { font: 800 32px/1 var(--body); color: var(--ink); letter-spacing: -.02em; }
+  .boot span { font: 600 15px/1 var(--body); animation: breathe 1.6s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .35; } }
+
+  /* Browser window chrome */
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 44px;
+    padding: 0 16px;
+    color: var(--chrome-ink);
+  }
+  .dots { display: flex; gap: 7px; flex: none; }
+  .dots i { width: 12px; height: 12px; border-radius: 50%; background: #CBD4E3; }
+  .url {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 28px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: var(--surface);
+    font: 600 13px/1 var(--body);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .url svg { flex: none; }
+  .url em { font-style: normal; color: var(--ink); overflow: hidden; text-overflow: ellipsis; }
+
+  /* Device chrome drawn over the app: inverts against whatever is beneath. */
+  .status, .homebar {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    color: #fff;
+    mix-blend-mode: difference;
+  }
+  .phone.web .status, .phone.web .homebar { color: #13204A; background: transparent; mix-blend-mode: normal; }
+  .phone.web .homebar { background: #13204A; }
+  .status {
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font: 700 17px/1 var(--body);
+    font-variant-numeric: tabular-nums;
+  }
+  .status .icons { display: flex; align-items: center; gap: 6px; }
+  .status svg { display: block; fill: currentColor; }
+  .phone .status { height: 54px; padding: 6px 30px 0 52px; }
+  .tablet .status { height: 24px; padding: 0 24px; font-size: 13px; }
+  .island {
+    position: absolute;
+    z-index: 3;
+    top: 11px;
+    left: 50%;
+    width: 124px;
+    height: 36px;
+    margin-left: -62px;
+    border-radius: 20px;
+    background: #000;
+    pointer-events: none;
+  }
+  .homebar {
+    bottom: 8px;
+    left: 50%;
+    height: 5px;
+    border-radius: 3px;
+    background: #fff;
+  }
+  .phone .homebar { width: 134px; margin-left: -67px; }
+  .tablet .homebar { width: 200px; margin-left: -100px; bottom: 7px; }
+
+  figcaption {
+    font: 600 13px/1.2 var(--body);
+    color: var(--muted);
+    letter-spacing: .04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer p { margin: 0; max-width: 80ch; }
+
+  @media (max-width: 720px) {
+    .products { grid-template-columns: 1fr; }
+    .product span { display: none; }
+    .rail { gap: 10px 12px; }
+    .rail .push { margin-left: 0; width: 100%; }
+    .rail .push select { flex: 1; width: auto; min-width: 0; }
+    .size-group { display: none; }
+    .stage { gap: 20px; padding-top: 20px; }
+    .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .boot span { animation: none; }
+    .seg button, .product { transition: none; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="band">
+    <div>
+      <p class="eyebrow"><span class="secret">Confidential</span> Interactive preview · Cebu</p>
+      <h1>Life Link</h1>
+      <p class="lede">The patient app, the staff web app and the public website, running in your browser on sample data.</p>
+    </div>
+    <div class="credit" aria-label="Built by GEOTECH">
+      <small>Built by</small>
+      <span class="geotech">GEOTECH</span>
+    </div>
+  </header>
+
+  <div class="products" role="tablist" aria-label="Product">
+    <button type="button" class="product" role="tab" id="tab-patient" data-product="patient" aria-selected="true" aria-controls="stage">
+      <b>Patient app</b><span>iPhone and iPad · English, Filipino, Bisaya</span>
+    </button>
+    <button type="button" class="product" role="tab" id="tab-staff" data-product="staff" aria-selected="false" aria-controls="stage">
+      <b>Staff web app</b><span>Clinic, chairside, physician and partner views</span>
+    </button>
+    <button type="button" class="product" role="tab" id="tab-website" data-product="website" aria-selected="false" aria-controls="stage">
+      <b>Website</b><span>The public site on a computer and a phone</span>
+    </button>
+  </div>
+
+  <nav class="rail" aria-label="Preview controls">
+    <!-- Patient app -->
+    <div class="group" data-for="patient">
+      <span id="lbl-show">Show</span>
+      <div class="seg" role="group" aria-labelledby="lbl-show">
+        <button type="button" id="show-phone" data-show="phone" aria-pressed="true">iPhone</button>
+        <button type="button" id="show-tablet" data-show="tablet" aria-pressed="false">iPad</button>
+        <button type="button" id="show-both" data-show="both" aria-pressed="false">iPhone + iPad</button>
+      </div>
+    </div>
+    <div class="group" data-for="patient">
+      <span id="lbl-ipad">iPad</span>
+      <div class="seg" role="group" aria-labelledby="lbl-ipad">
+        <button type="button" id="ipad-portrait" data-orient="portrait" aria-pressed="true">Portrait</button>
+        <button type="button" id="ipad-landscape" data-orient="landscape" aria-pressed="false">Landscape</button>
+      </div>
+    </div>
+    <!-- Staff web app -->
+    <div class="group" data-for="staff">
+      <span id="lbl-screen">Screen</span>
+      <div class="seg" role="group" aria-labelledby="lbl-screen">
+        <button type="button" id="staff-desktop" data-staff="desktop" aria-pressed="true">Desktop</button>
+        <button type="button" id="staff-tablet" data-staff="tablet" aria-pressed="false">Tablet</button>
+      </div>
+    </div>
+    <!-- Website -->
+    <div class="group" data-for="website">
+      <span id="lbl-site">Show</span>
+      <div class="seg" role="group" aria-labelledby="lbl-site">
+        <button type="button" id="site-desktop" data-site="desktop" aria-pressed="true">Computer</button>
+        <button type="button" id="site-phone" data-site="phone" aria-pressed="false">Phone</button>
+        <button type="button" id="site-both" data-site="both" aria-pressed="false">Both</button>
+      </div>
+    </div>
+    <!-- All -->
+    <div class="group size-group">
+      <span id="lbl-size">Size</span>
+      <div class="seg" role="group" aria-labelledby="lbl-size">
+        <button type="button" id="size-fit" data-size="fit" aria-pressed="true">Fit</button>
+        <button type="button" id="size-full" data-size="full" aria-pressed="false">100%</button>
+      </div>
+    </div>
+    <div class="group push">
+      <select id="jump-patient" data-for="patient" aria-label="Go to a screen of the patient app">
+        <option value="">Go to a screen…</option>
+        <optgroup label="First-run setup">
+          <option value="/setup/language">1 · Choose your language</option>
+          <option value="/setup/text">2 · Text size</option>
+          <option value="/welcome">3 · Welcome and sign in</option>
+          <option value="/verify">4 · Code, consent and fingerprint</option>
+          <option value="/tutorial">5 · Reminders</option>
+          <option value="/setup/family">6 · Add a family helper</option>
+          <option value="/setup/done">You're all set</option>
+          <option value="/update">Forced update</option>
+        </optgroup>
+        <optgroup label="Today">
+          <option value="/home">Today (home)</option>
+          <option value="/home/inbox">Notifications</option>
+          <option value="/home/first-90-days">First 90 days</option>
+          <option value="/home/typhoon">Typhoon plan</option>
+          <option value="/home/family-helper">Family helper view</option>
+          <option value="/messages">Messages</option>
+          <option value="/help">Get help and medical ID</option>
+        </optgroup>
+        <optgroup label="Schedule">
+          <option value="/schedule">My schedule</option>
+          <option value="/change-request">Change a session</option>
+          <option value="/schedule/session">Session summary</option>
+          <option value="/schedule/treatments">Past treatments</option>
+          <option value="/schedule/ride">Rides to dialysis</option>
+          <option value="/schedule/travel">Dialysis while traveling</option>
+        </optgroup>
+        <optgroup label="Health">
+          <option value="/health">My health</option>
+          <option value="/health/results">Lab results</option>
+          <option value="/health/log">My log</option>
+          <option value="/health/medicines">Medicines</option>
+          <option value="/health/care-plan">Care plan</option>
+          <option value="/health/food">Food guide</option>
+          <option value="/health/wellbeing">How I'm doing</option>
+          <option value="/health/hospital">Hospital or ER report</option>
+          <option value="/health/book-consult">Book a consult</option>
+        </optgroup>
+        <optgroup label="Costs">
+          <option value="/costs">My cost plan</option>
+          <option value="/costs/documents">Papers and payment help</option>
+          <option value="/costs/pay">Pay my balance</option>
+        </optgroup>
+        <optgroup label="Me">
+          <option value="/me">Me</option>
+          <option value="/me/family-helpers">Family helpers</option>
+          <option value="/me/display">Text and display</option>
+          <option value="/me/notifications">Notification settings</option>
+          <option value="/me/privacy">Privacy and my data</option>
+          <option value="/me/learn">Learn and help</option>
+          <option value="/me/feedback">Feedback and rights</option>
+        </optgroup>
+      </select>
+      <select id="jump-staff" data-for="staff" aria-label="Go to a page of the staff web app">
+        <option value="">Go to a page…</option>
+        <optgroup label="Clinic day">
+          <option value="/staff/today">Today's shift</option>
+          <option value="/staff/front-desk">Front desk</option>
+          <option value="/staff/intake">Intake and waitlist</option>
+          <option value="/staff/schedule">Chair and shift board</option>
+          <option value="/staff/flowsheet">Chairside flowsheet</option>
+        </optgroup>
+        <optgroup label="Patients">
+          <option value="/staff/patients">Patient chart</option>
+          <option value="/staff/patients/care-plan">Care plan editor</option>
+          <option value="/staff/patients/assessments">Assessments and screenings</option>
+          <option value="/staff/patients/labs">Labs and adequacy</option>
+          <option value="/staff/patients/medicines">Medicines and MAR</option>
+          <option value="/staff/patients/access">Vascular access</option>
+          <option value="/staff/patients/hospital-stays">Hospital stays and transfers</option>
+          <option value="/staff/patients/consents">Consents and representatives</option>
+          <option value="/staff/orders">Orders and protocols</option>
+        </optgroup>
+        <optgroup label="Safety and quality">
+          <option value="/staff/infection-control">Infection control</option>
+          <option value="/staff/safety-logs">Safety logs</option>
+          <option value="/staff/equipment">Machines, water and waste</option>
+          <option value="/staff/emergency">Emergency preparedness</option>
+          <option value="/staff/incidents">Incident report</option>
+          <option value="/staff/complaints">Complaints and reviews</option>
+          <option value="/staff/quality">Quality and QAPI</option>
+        </optgroup>
+        <optgroup label="Money and supplies">
+          <option value="/staff/billing">Billing and PhilHealth claims</option>
+          <option value="/staff/billing/claim">Claim detail</option>
+          <option value="/staff/cashier">Cashier and day closing</option>
+          <option value="/staff/inventory">Inventory</option>
+        </optgroup>
+        <optgroup label="Team and community">
+          <option value="/staff/team">Team, licenses and health</option>
+          <option value="/staff/academy">Nurse academy</option>
+          <option value="/staff/community/transport">Community transport</option>
+          <option value="/staff/community/screening">Kidney screening</option>
+          <option value="/staff/lgu">Cebu LGU partner portal</option>
+        </optgroup>
+        <optgroup label="Leadership and setup">
+          <option value="/staff/leadership">Leadership dashboard</option>
+          <option value="/staff/growth/board-report">Board report</option>
+          <option value="/staff/growth/impact">Impact</option>
+          <option value="/staff/growth/new-centers">New centers</option>
+          <option value="/staff/admin">Users, messages, licenses</option>
+          <option value="/staff/setup">Setup, policies, website content</option>
+          <option value="/staff/security">Privacy and security</option>
+          <option value="/staff/coming-later">Coming later</option>
+        </optgroup>
+        <optgroup label="Doctors">
+          <option value="/physician/review">Nephrologist review</option>
+          <option value="/partner/doctor">Doctor partner portal</option>
+        </optgroup>
+      </select>
+      <select id="jump-website" data-for="website" aria-label="Go to a page of the website">
+        <option value="">Go to a page…</option>
+        <option value="/">Home</option>
+        <option value="/about">About, locations and contact</option>
+        <option value="/learn">Learn, coverage and FAQ</option>
+        <option value="/quality">Quality and outcomes</option>
+        <option value="/refer">Refer a patient</option>
+        <option value="/register">Register a patient</option>
+        <option value="/news">News, careers and partners</option>
+        <option value="/legal">Privacy, terms and cookies</option>
+      </select>
+      <button type="button" class="btn" id="restart">Restart</button>
+    </div>
+  </nav>
+
+  <main class="stage" id="stage" aria-live="polite">
+    <!-- Patient app -->
+    <figure class="device phone" id="dev-phone" data-product="patient">
+      <div class="fit">
+        <div class="frame">
+          <div class="screen">
+            <div class="boot"><strong>Life Link</strong><span>Opening the app…</span></div>
+            <iframe title="Life Link patient app on iPhone" allow="autoplay; fullscreen"></iframe>
+            <div class="status">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8 .6C5.2.6 2.7 1.7.8 3.5L2 4.7a8.5 8.5 0 0 1 6-2.4Zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.2-1.2A6.9 6.9 0 0 0 8 4c-1.9 0-3.5.7-4.8 1.9l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Zm0 3.3c-.6 0-1.2.2-1.6.6L8 11.2l1.6-1.6c-.4-.4-1-.6-1.6-.6Z"/></svg>
+                <svg width="27" height="13" viewBox="0 0 27 13" aria-hidden="true"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2Z" opacity=".4"/></svg>
+              </span>
+            </div>
+            <div class="island"></div>
+            <div class="homebar"></div>          </div>
+        </div>
+      </div>
+      <figcaption>iPhone · 390 × 844</figcaption>
+    </figure>
+
+    <figure class="device tablet" id="dev-tablet" data-product="patient">
+      <div class="fit">
+        <div class="frame">
+          <div class="screen">
+            <div class="boot"><strong>Life Link</strong><span>Opening the app…</span></div>
+            <iframe title="Life Link patient app on iPad" allow="autoplay; fullscreen"></iframe>
+            <div class="status">
+              <span>9:41 AM&nbsp;&nbsp;Wed Oct 28</span>
+              <span class="icons">
+                <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8 .6C5.2.6 2.7 1.7.8 3.5L2 4.7a8.5 8.5 0 0 1 6-2.4Zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.2-1.2A6.9 6.9 0 0 0 8 4c-1.9 0-3.5.7-4.8 1.9l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Zm0 3.3c-.6 0-1.2.2-1.6.6L8 11.2l1.6-1.6c-.4-.4-1-.6-1.6-.6Z"/></svg>
+                <span>100%</span>
+                <svg width="27" height="13" viewBox="0 0 27 13" aria-hidden="true"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2Z" opacity=".4"/></svg>
+              </span>
+            </div>
+            <div class="homebar"></div>          </div>
+        </div>
+      </div>
+      <figcaption id="tablet-cap">iPad · 820 × 1180</figcaption>
+    </figure>
+
+    <!-- Staff web app -->
+    <figure class="device browser" id="dev-staff" data-product="staff">
+      <div class="fit">
+        <div class="frame">
+          <div class="bar">
+            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="url"><svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true"><rect x=".75" y="5.5" width="9.5" height="6.75" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2.75 5.5V4a2.75 2.75 0 0 1 5.5 0v1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>Life Link staff</span><em id="url-staff">/staff/today</em></span>
+          </div>
+          <div class="screen" id="screen-staff">
+            <div class="boot"><strong>Life Link</strong><span>Opening the staff web app…</span></div>
+            <iframe title="Life Link staff web app"></iframe>          </div>
+        </div>
+      </div>
+      <figcaption id="staff-cap">Desktop · 1440 × 900</figcaption>
+    </figure>
+
+    <!-- Website -->
+    <figure class="device browser" id="dev-site" data-product="website">
+      <div class="fit">
+        <div class="frame">
+          <div class="bar">
+            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="url"><svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true"><rect x=".75" y="5.5" width="9.5" height="6.75" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2.75 5.5V4a2.75 2.75 0 0 1 5.5 0v1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>Life Link</span><em id="url-site">/</em></span>
+          </div>
+          <div class="screen" id="screen-site">
+            <div class="boot"><strong>Life Link</strong><span>Opening the website…</span></div>
+            <iframe title="Life Link website on a computer"></iframe>          </div>
+        </div>
+      </div>
+      <figcaption>Computer · 1440 × 900</figcaption>
+    </figure>
+
+    <figure class="device phone web" id="dev-site-phone" data-product="website">
+      <div class="fit">
+        <div class="frame">
+          <div class="screen">
+            <div class="boot"><strong>Life Link</strong><span>Opening the website…</span></div>
+            <iframe title="Life Link website on a phone"></iframe>
+            <div class="status">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                <svg width="27" height="13" viewBox="0 0 27 13" aria-hidden="true"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2Z" opacity=".4"/></svg>
+              </span>
+            </div>
+            <div class="island"></div>
+            <div class="homebar"></div>          </div>
+        </div>
+      </div>
+      <figcaption>Phone · 390 × 844</figcaption>
+    </figure>
+  </main>
+
+  <p class="hint" id="hint"></p>
+
+  <footer>
+    <p>Everything runs on sample data. No real appointments, records, forms, payments or messages are sent.</p>
+    <p><strong>Confidential.</strong> Prototype © 2026 GEOTECH, prepared for Life Link only. Please don't share it further.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // Each part is the real build, served next to this page:
+  //   app/     patient app (Flutter web, hash routes, ?inset=<top>,<bottom>)
+  //   portal/  staff web app (Next.js export, basePath /portal)
+  //   site/    public website (Next.js export, basePath /site)
+  var START = { patient: '/setup/language', staff: '/staff/today', website: '/' };
+  var BASE = { staff: 'portal', website: 'site' };
+  var STAFF_SIZES = { desktop: [1440, 900, 'Desktop'], tablet: [1180, 820, 'Tablet'] };
+  var HINTS = {
+    patient: '<b>Click</b> to tap, <b>drag</b> to swipe, <b>scroll</b> to move down a page. Each device keeps its own place, and "Go to a screen" moves both. Change the language or text size inside the app, under Me.',
+    staff: '<b>Click</b> through the sidebar like a staff member would. Pages open on the Cebu clinic\'s sample day.',
+    website: '<b>Click</b> through the site and try the forms; they answer with a sample reference number and send nothing.'
+  };
+  var DEVICES = {
+    phone: { el: document.getElementById('dev-phone'), product: 'patient', w: 390, h: 844, pad: 14, inset: '47,34' },
+    tablet: { el: document.getElementById('dev-tablet'), product: 'patient', w: 820, h: 1180, pad: 22, inset: '24,20' },
+    staff: { el: document.getElementById('dev-staff'), product: 'staff', w: 1440, h: 900, chrome: 44 },
+    site: { el: document.getElementById('dev-site'), product: 'website', w: 1440, h: 900, chrome: 44 },
+    sitePhone: { el: document.getElementById('dev-site-phone'), product: 'website', w: 390, h: 844, pad: 14 }
+  };
+  var narrow = window.matchMedia('(max-width: 720px)').matches;
+  var state = { product: 'patient', show: 'phone', landscape: false, staff: 'desktop', site: 'desktop', size: 'fit' };
+
+  function store(key, value) {
+    try { localStorage.setItem('lifelink-preview-' + key, value); } catch (e) {}
+  }
+  function recall(key) {
+    try { return localStorage.getItem('lifelink-preview-' + key); } catch (e) { return null; }
+  }
+  if (/^(both|phone|tablet)$/.test(recall('show') || '')) state.show = recall('show');
+  if (recall('landscape') === '1') state.landscape = true;
+  if (/^(desktop|tablet)$/.test(recall('staff') || '')) state.staff = recall('staff');
+  if (/^(desktop|phone|both)$/.test(recall('site') || '')) state.site = recall('site');
+  if (recall('size') === 'full') state.size = 'full';
+  if (/^(patient|staff|website)$/.test(location.hash.slice(1))) state.product = location.hash.slice(1);
+  if (narrow) { state.show = state.show === 'tablet' ? 'tablet' : 'phone'; state.site = state.site === 'desktop' ? 'desktop' : 'phone'; }
+
+  function frameOf(kind) { return DEVICES[kind].el.querySelector('iframe'); }
+  function url(kind, route, fresh) {
+    var d = DEVICES[kind];
+    if (d.product === 'patient') {
+      return 'app/index.html?inset=' + d.inset + (fresh ? '&r=' + Date.now() : '') + '#' + route;
+    }
+    // Pages are opened by file: …/route/index.html.
+    var path = BASE[d.product] + (route === '/' ? '' : route) + '/index.html';
+    return path + (fresh ? '?r=' + Date.now() : '');
+  }
+  function visible() {
+    if (state.product === 'patient') return state.show === 'both' ? ['phone', 'tablet'] : [state.show];
+    if (state.product === 'staff') return ['staff'];
+    return state.site === 'both' ? ['site', 'sitePhone'] : [state.site === 'phone' ? 'sitePhone' : 'site'];
+  }
+  // A device boots the first time it is shown, so viewers only download the
+  // parts they open.
+  function boot(kind, route) {
+    var f = frameOf(kind);
+    if (f.getAttribute('src')) return false;
+    f.src = url(kind, route || START[DEVICES[kind].product]);
+    return true;
+  }
+  function go(kind, route) {
+    if (boot(kind, route)) return;
+    var f = frameOf(kind);
+    if (DEVICES[kind].product === 'patient') {
+      try { f.contentWindow.location.hash = route; return; } catch (e) {}
+    }
+    f.src = url(kind, route);
+  }
+
+  function screenSize(kind) {
+    var d = DEVICES[kind];
+    if (kind === 'tablet' && state.landscape) return { w: d.h, h: d.w };
+    if (kind === 'staff') { var s = STAFF_SIZES[state.staff]; return { w: s[0], h: s[1] }; }
+    return { w: d.w, h: d.h };
+  }
+  function outer(kind) {
+    var d = DEVICES[kind];
+    var s = screenSize(kind);
+    if (d.chrome) return { w: s.w, h: s.h + d.chrome };
+    return { w: s.w + 2 * d.pad, h: s.h + 2 * d.pad };
+  }
+
+  function layout() {
+    var stage = document.getElementById('stage');
+    var kinds = visible();
+    var gap = narrow ? 20 : 40;
+    var top = stage.getBoundingClientRect().top + window.scrollY;
+    var availH = Math.max(420, window.innerHeight - top - 64);
+    var availW = stage.clientWidth - 24 - gap * (kinds.length - 1);
+    var sizes = kinds.map(outer);
+    var scales = sizes.map(function (s) {
+      return state.size === 'full' && !narrow ? 1 : Math.min(1, availH / s.h);
+    });
+    var total = sizes.reduce(function (sum, s, i) { return sum + s.w * scales[i]; }, 0);
+    if (total > availW) {
+      var k = availW / total;
+      scales = scales.map(function (s) { return s * k; });
+    }
+    Object.keys(DEVICES).forEach(function (kind) {
+      DEVICES[kind].el.classList.toggle('off', kinds.indexOf(kind) < 0);
+    });
+    kinds.forEach(function (kind, i) {
+      var el = DEVICES[kind].el;
+      var s = sizes[i], sc = scales[i];
+      var fit = el.querySelector('.fit');
+      fit.style.width = Math.round(s.w * sc) + 'px';
+      fit.style.height = Math.round(s.h * sc) + 'px';
+      el.querySelector('.frame').style.transform = 'scale(' + sc + ')';
+      if (DEVICES[kind].chrome) {
+        var ss = screenSize(kind);
+        var screen = el.querySelector('.screen');
+        screen.style.width = ss.w + 'px';
+        screen.style.height = ss.h + 'px';
+      }
+    });
+  }
+
+  function render() {
+    document.querySelectorAll('[data-product][role="tab"]').forEach(function (b) {
+      b.setAttribute('aria-selected', String(b.dataset.product === state.product));
+    });
+    document.querySelectorAll('[data-for]').forEach(function (el) {
+      el.hidden = el.dataset.for !== state.product;
+    });
+    document.querySelectorAll('[data-show]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.show === state.show));
+    });
+    document.querySelectorAll('[data-orient]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String((b.dataset.orient === 'landscape') === state.landscape));
+      b.disabled = state.show === 'phone';
+    });
+    document.querySelectorAll('[data-staff]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.staff === state.staff));
+    });
+    document.querySelectorAll('[data-site]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.site === state.site));
+    });
+    document.querySelectorAll('[data-size]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.size === state.size));
+    });
+    DEVICES.tablet.el.classList.toggle('landscape', state.landscape);
+    document.getElementById('tablet-cap').textContent =
+      state.landscape ? 'iPad · 1180 × 820' : 'iPad · 820 × 1180';
+    var st = STAFF_SIZES[state.staff];
+    document.getElementById('staff-cap').textContent = st[2] + ' · ' + st[0] + ' × ' + st[1];
+    document.getElementById('hint').innerHTML = HINTS[state.product];
+    visible().forEach(function (kind) { boot(kind); });
+    layout();
+  }
+
+  // The address bar follows the page the frame is on.
+  function watchAddress(kind, labelId) {
+    var label = document.getElementById(labelId);
+    var base = '/' + BASE[DEVICES[kind].product];
+    setInterval(function () {
+      var p;
+      try { p = frameOf(kind).contentWindow.location.pathname; } catch (e) { return; }
+      if (!p || p.indexOf(base) < 0) return;
+      p = p.slice(p.indexOf(base) + base.length).replace(/index\.html$/, '').replace(/\/$/, '') || '/';
+      if (label.textContent !== p) label.textContent = p;
+    }, 500);
+  }
+  watchAddress('staff', 'url-staff');
+  watchAddress('site', 'url-site');
+
+  document.querySelectorAll('[data-product][role="tab"]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.product = b.dataset.product;
+      try { history.replaceState(null, '', '#' + state.product); } catch (e) { location.hash = state.product; }
+      render();
+    });
+  });
+  window.addEventListener('hashchange', function () {
+    var p = location.hash.slice(1);
+    if (/^(patient|staff|website)$/.test(p) && p !== state.product) { state.product = p; render(); }
+  });
+  function bindSeg(attr, key, persist) {
+    document.querySelectorAll('[data-' + attr + ']').forEach(function (b) {
+      if (b.getAttribute('role') === 'tab') return;
+      b.addEventListener('click', function () {
+        var v = b.dataset[attr];
+        state[key] = key === 'landscape' ? v === 'landscape' : v;
+        store(persist, key === 'landscape' ? (state.landscape ? '1' : '0') : v);
+        render();
+      });
+    });
+  }
+  bindSeg('show', 'show', 'show');
+  bindSeg('orient', 'landscape', 'landscape');
+  bindSeg('staff', 'staff', 'staff');
+  bindSeg('site', 'site', 'site');
+  bindSeg('size', 'size', 'size');
+
+  document.querySelectorAll('select[data-for]').forEach(function (sel) {
+    sel.addEventListener('change', function (e) {
+      var route = e.target.value;
+      if (route) visible().forEach(function (kind) { go(kind, route); });
+      e.target.value = '';
+    });
+  });
+  document.getElementById('restart').addEventListener('click', function () {
+    visible().forEach(function (kind) {
+      frameOf(kind).src = url(kind, START[DEVICES[kind].product], true);
+    });
+  });
+  window.addEventListener('resize', layout);
+
+  render();
+})();
+</script>
