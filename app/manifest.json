@@ -1,11 +1,11 @@
 {
-    "name": "life_link",
-    "short_name": "life_link",
+    "name": "Life Link",
+    "short_name": "Life Link",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F3F7FC",
+    "theme_color": "#13204A",
+    "description": "Life Link: your dialysis schedule, results and care team in Cebu.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
