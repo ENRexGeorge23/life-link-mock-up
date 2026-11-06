@@ -382,7 +382,7 @@
 
   <div class="products" role="tablist" aria-label="Product">
     <button type="button" class="product" role="tab" id="tab-patient" data-product="patient" aria-selected="true" aria-controls="stage">
-      <b>Patient app</b><span>iPhone and iPad · English, Filipino, Bisaya</span>
+      <b>Patient app</b><span>iPhone and iPad · English, Filipino, Bisaya · nurse side</span>
     </button>
     <button type="button" class="product" role="tab" id="tab-staff" data-product="staff" aria-selected="false" aria-controls="stage">
       <b>Staff web app</b><span>Clinic, chairside, physician and partner views</span>
@@ -489,6 +489,14 @@
           <option value="/me/privacy">Privacy and my data</option>
           <option value="/me/learn">Learn and help</option>
           <option value="/me/feedback">Feedback and rights</option>
+        </optgroup>
+        <optgroup label="Nurse side (best on iPad landscape)">
+          <option value="/nurse/sign-in">Staff sign in</option>
+          <option value="/nurse/shift">My shift</option>
+          <option value="/nurse/shift/before">Before dialysis</option>
+          <option value="/nurse/shift/during">During dialysis (vitals)</option>
+          <option value="/nurse/shift/after">After dialysis</option>
+          <option value="/nurse/requests">Requests</option>
         </optgroup>
       </select>
       <select id="jump-staff" data-for="staff" aria-label="Go to a page of the staff web app">
