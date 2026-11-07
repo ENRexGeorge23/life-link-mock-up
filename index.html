@@ -503,6 +503,9 @@
           <option value="/nurse/updates">Updates to patients</option>
         </optgroup>
       </select>
+      <select id="variant-patient" data-for="patient" data-variant aria-label="Show this screen in another state or step" disabled>
+        <option value="">Screen state / step…</option>
+      </select>
       <select id="jump-staff" data-for="staff" aria-label="Go to a page of the staff web app">
         <option value="">Go to a page…</option>
         <optgroup label="Clinic day">
@@ -873,13 +876,1604 @@
   bindSeg('site', 'site', 'site');
   bindSeg('size', 'size', 'size');
 
-  document.querySelectorAll('select[data-for]').forEach(function (sel) {
+  document.querySelectorAll('select[data-for]:not([data-variant])').forEach(function (sel) {
     sel.addEventListener('change', function (e) {
       var route = e.target.value;
       if (route) visible().forEach(function (kind) { go(kind, route); });
       e.target.value = '';
+      setTimeout(fillVariants, 300);
     });
   });
+
+  // The canvas Tweaks of the screen on show: its Screen states (Loading,
+  // Empty, Couldn't load, Offline) and its action's Steps. The app reads
+  // them from the URL (#/home?state=offline, #/home?step=not-sent).
+  // tool/gen_routes.js writes tool/client_preview/variants.json; the build
+  // puts it here.
+  var VARIANTS = /*LL_VARIANTS*/{
+ "/welcome": {
+  "artboard": "App-Welcome",
+  "states": [
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending code",
+    "query": "step=sending-code"
+   },
+   {
+    "name": "Number not valid",
+    "query": "step=number-not-valid"
+   },
+   {
+    "name": "No internet",
+    "query": "step=no-internet"
+   }
+  ]
+ },
+ "/verify": {
+  "artboard": "App-Verify",
+  "states": [
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Checking",
+    "query": "step=checking"
+   },
+   {
+    "name": "Wrong code",
+    "query": "step=wrong-code"
+   },
+   {
+    "name": "Code expired",
+    "query": "step=code-expired"
+   },
+   {
+    "name": "Too many tries",
+    "query": "step=too-many-tries"
+   },
+   {
+    "name": "New code sent",
+    "query": "step=new-code-sent"
+   }
+  ]
+ },
+ "/tutorial": {
+  "artboard": "App-Tutorial",
+  "states": [],
+  "steps": [
+   {
+    "name": "Phone asks",
+    "query": "step=phone-asks"
+   },
+   {
+    "name": "Reminders turned off",
+    "query": "step=reminders-turned-off"
+   }
+  ]
+ },
+ "/setup/family": {
+  "artboard": "App-SetupFamily",
+  "states": [],
+  "steps": [
+   {
+    "name": "Sending invite",
+    "query": "step=sending-invite"
+   },
+   {
+    "name": "Number not valid",
+    "query": "step=number-not-valid"
+   },
+   {
+    "name": "Invite sent",
+    "query": "step=invite-sent"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/setup/done": {
+  "artboard": "App-SetupDone",
+  "states": [],
+  "steps": [
+   {
+    "name": "Done",
+    "query": "step=done"
+   },
+   {
+    "name": "Saving",
+    "query": "step=saving"
+   }
+  ]
+ },
+ "/update": {
+  "artboard": "App-Update",
+  "states": [],
+  "steps": [
+   {
+    "name": "Downloading",
+    "query": "step=downloading"
+   },
+   {
+    "name": "Couldn’t update",
+    "query": "step=couldn-t-update"
+   }
+  ]
+ },
+ "/home/family-helper": {
+  "artboard": "App-Caregiver",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/me/family-helpers": {
+  "artboard": "App-Representative",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Add helper",
+    "query": "step=add-helper"
+   },
+   {
+    "name": "Sending invite",
+    "query": "step=sending-invite"
+   },
+   {
+    "name": "Invite sent",
+    "query": "step=invite-sent"
+   },
+   {
+    "name": "Accepted",
+    "query": "step=accepted"
+   },
+   {
+    "name": "Invite not sent",
+    "query": "step=invite-not-sent"
+   },
+   {
+    "name": "Remove confirm",
+    "query": "step=remove-confirm"
+   },
+   {
+    "name": "Removed",
+    "query": "step=removed"
+   }
+  ]
+ },
+ "/home": {
+  "artboard": "App-Home",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Choose how late",
+    "query": "step=choose-how-late"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Sent",
+    "query": "step=sent"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/home/inbox": {
+  "artboard": "App-Inbox",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "All marked as read",
+    "query": "step=all-marked-as-read"
+   }
+  ]
+ },
+ "/schedule/ride": {
+  "artboard": "App-Ride",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Waiting for the driver team",
+    "query": "step=waiting-for-the-driver-team"
+   },
+   {
+    "name": "Ride confirmed",
+    "query": "step=ride-confirmed"
+   },
+   {
+    "name": "Driver on the way",
+    "query": "step=driver-on-the-way"
+   },
+   {
+    "name": "Not available",
+    "query": "step=not-available"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/schedule": {
+  "artboard": "App-Schedule",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Confirmed",
+    "query": "step=confirmed"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/change-request": {
+  "artboard": "App-Change",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Waiting for the clinic",
+    "query": "step=waiting-for-the-clinic"
+   },
+   {
+    "name": "Approved",
+    "query": "step=approved"
+   },
+   {
+    "name": "Offered another time",
+    "query": "step=offered-another-time"
+   },
+   {
+    "name": "Declined",
+    "query": "step=declined"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   },
+   {
+    "name": "Waiting to send",
+    "query": "step=waiting-to-send"
+   }
+  ]
+ },
+ "/schedule/session": {
+  "artboard": "App-Session",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Thank you",
+    "query": "step=thank-you"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/schedule/treatments": {
+  "artboard": "App-Treatments",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Waiting for the clinic",
+    "query": "step=waiting-for-the-clinic"
+   },
+   {
+    "name": "Booked",
+    "query": "step=booked"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/health": {
+  "artboard": "App-Health",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/health/results": {
+  "artboard": "App-Results",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Sent",
+    "query": "step=sent"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/health/log": {
+  "artboard": "App-Log",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Typing",
+    "query": "step=typing"
+   },
+   {
+    "name": "Saving",
+    "query": "step=saving"
+   },
+   {
+    "name": "Saved",
+    "query": "step=saved"
+   },
+   {
+    "name": "Please check this number",
+    "query": "step=please-check-this-number"
+   },
+   {
+    "name": "Saved on your phone",
+    "query": "step=saved-on-your-phone"
+   }
+  ]
+ },
+ "/health/hospital": {
+  "artboard": "App-Hospital",
+  "states": [
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Missing information",
+    "query": "step=missing-information"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Sent",
+    "query": "step=sent"
+   },
+   {
+    "name": "Waiting to send",
+    "query": "step=waiting-to-send"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/health/medicines": {
+  "artboard": "App-Medicines",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Undo for 5 seconds",
+    "query": "step=undo-for-5-seconds"
+   },
+   {
+    "name": "Taken",
+    "query": "step=taken"
+   },
+   {
+    "name": "Refill sending",
+    "query": "step=refill-sending"
+   },
+   {
+    "name": "Refill waiting for the clinic",
+    "query": "step=refill-waiting-for-the-clinic"
+   },
+   {
+    "name": "Refill ready to pick up",
+    "query": "step=refill-ready-to-pick-up"
+   },
+   {
+    "name": "Refill not sent",
+    "query": "step=refill-not-sent"
+   }
+  ]
+ },
+ "/health/food": {
+  "artboard": "App-Food",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/health/care-plan": {
+  "artboard": "App-CarePlan",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Confirm",
+    "query": "step=confirm"
+   },
+   {
+    "name": "Signing",
+    "query": "step=signing"
+   },
+   {
+    "name": "Signed",
+    "query": "step=signed"
+   },
+   {
+    "name": "Not signed",
+    "query": "step=not-signed"
+   }
+  ]
+ },
+ "/home/first-90-days": {
+  "artboard": "App-FirstDays",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/health/wellbeing": {
+  "artboard": "App-Wellbeing",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "First question",
+    "query": "step=first-question"
+   },
+   {
+    "name": "Last question",
+    "query": "step=last-question"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Thank you",
+    "query": "step=thank-you"
+   },
+   {
+    "name": "Thank you, we will call",
+    "query": "step=thank-you-we-will-call"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/schedule/travel": {
+  "artboard": "App-Travel",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Waiting for the clinic",
+    "query": "step=waiting-for-the-clinic"
+   },
+   {
+    "name": "Arranged",
+    "query": "step=arranged"
+   },
+   {
+    "name": "Not possible on those dates",
+    "query": "step=not-possible-on-those-dates"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/health/book-consult": {
+  "artboard": "App-Book",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Waiting for the clinic",
+    "query": "step=waiting-for-the-clinic"
+   },
+   {
+    "name": "Booked",
+    "query": "step=booked"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   }
+  ]
+ },
+ "/me": {
+  "artboard": "App-Me",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/me/notifications": {
+  "artboard": "App-Notifications",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Saved",
+    "query": "step=saved"
+   },
+   {
+    "name": "Not saved",
+    "query": "step=not-saved"
+   },
+   {
+    "name": "Blocked by the phone",
+    "query": "step=blocked-by-the-phone"
+   }
+  ]
+ },
+ "/me/privacy": {
+  "artboard": "App-Privacy",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Download preparing",
+    "query": "step=download-preparing"
+   },
+   {
+    "name": "Download ready",
+    "query": "step=download-ready"
+   },
+   {
+    "name": "Delete step 1",
+    "query": "step=delete-step-1"
+   },
+   {
+    "name": "Delete step 2",
+    "query": "step=delete-step-2"
+   },
+   {
+    "name": "Delete sending",
+    "query": "step=delete-sending"
+   },
+   {
+    "name": "Delete request sent",
+    "query": "step=delete-request-sent"
+   },
+   {
+    "name": "Delete not sent",
+    "query": "step=delete-not-sent"
+   }
+  ]
+ },
+ "/me/display": {
+  "artboard": "App-Display",
+  "states": [],
+  "steps": [
+   {
+    "name": "Saved",
+    "query": "step=saved"
+   }
+  ]
+ },
+ "/costs/documents": {
+  "artboard": "App-Documents",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Choose photo",
+    "query": "step=choose-photo"
+   },
+   {
+    "name": "Uploading",
+    "query": "step=uploading"
+   },
+   {
+    "name": "Uploaded",
+    "query": "step=uploaded"
+   },
+   {
+    "name": "Upload failed",
+    "query": "step=upload-failed"
+   },
+   {
+    "name": "Photo unclear",
+    "query": "step=photo-unclear"
+   },
+   {
+    "name": "Approved",
+    "query": "step=approved"
+   },
+   {
+    "name": "Needs a new photo",
+    "query": "step=needs-a-new-photo"
+   }
+  ]
+ },
+ "/costs": {
+  "artboard": "App-Costs",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/messages": {
+  "artboard": "App-Messages",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Typing",
+    "query": "step=typing"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Sent",
+    "query": "step=sent"
+   },
+   {
+    "name": "Seen",
+    "query": "step=seen"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   },
+   {
+    "name": "Waiting to send",
+    "query": "step=waiting-to-send"
+   },
+   {
+    "name": "Photo uploading",
+    "query": "step=photo-uploading"
+   },
+   {
+    "name": "Nurse is typing",
+    "query": "step=nurse-is-typing"
+   }
+  ]
+ },
+ "/help": {
+  "artboard": "App-Help",
+  "states": [
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Calling the clinic",
+    "query": "step=calling-the-clinic"
+   },
+   {
+    "name": "Emergency call",
+    "query": "step=emergency-call"
+   }
+  ]
+ },
+ "/me/feedback": {
+  "artboard": "App-Feedback",
+  "states": [
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Missing text",
+    "query": "step=missing-text"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Sent",
+    "query": "step=sent"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   },
+   {
+    "name": "Waiting to send",
+    "query": "step=waiting-to-send"
+   }
+  ]
+ },
+ "/me/learn": {
+  "artboard": "App-Learn",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/home/typhoon": {
+  "artboard": "App-Typhoon",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Confirm",
+    "query": "step=confirm"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Confirmed",
+    "query": "step=confirmed"
+   },
+   {
+    "name": "Waiting to send",
+    "query": "step=waiting-to-send"
+   }
+  ]
+ },
+ "/costs/pay": {
+  "artboard": "App-Pay",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Processing",
+    "query": "step=processing"
+   },
+   {
+    "name": "Paid",
+    "query": "step=paid"
+   },
+   {
+    "name": "Waiting for confirmation",
+    "query": "step=waiting-for-confirmation"
+   },
+   {
+    "name": "Payment failed",
+    "query": "step=payment-failed"
+   }
+  ]
+ },
+ "/nurse/sign-in": {
+  "artboard": "Nurse-Login",
+  "states": [
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Signing in",
+    "query": "step=signing-in"
+   },
+   {
+    "name": "Wrong PIN",
+    "query": "step=wrong-pin"
+   },
+   {
+    "name": "Locked",
+    "query": "step=locked"
+   },
+   {
+    "name": "Session expired",
+    "query": "step=session-expired"
+   }
+  ]
+ },
+ "/nurse/shift": {
+  "artboard": "Nurse-Shift",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/nurse/shift/before": {
+  "artboard": "Nurse-Before",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/nurse/shift/during": {
+  "artboard": "Nurse-During",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Saving",
+    "query": "step=saving"
+   },
+   {
+    "name": "Saved",
+    "query": "step=saved"
+   },
+   {
+    "name": "Please check this value",
+    "query": "step=please-check-this-value"
+   },
+   {
+    "name": "Saved on tablet",
+    "query": "step=saved-on-tablet"
+   },
+   {
+    "name": "Sync failed",
+    "query": "step=sync-failed"
+   },
+   {
+    "name": "Saved on phone",
+    "query": "step=saved-on-phone"
+   }
+  ]
+ },
+ "/nurse/shift/after": {
+  "artboard": "Nurse-After",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Missing items",
+    "query": "step=missing-items"
+   },
+   {
+    "name": "Finishing",
+    "query": "step=finishing"
+   },
+   {
+    "name": "Sent to the patient app",
+    "query": "step=sent-to-the-patient-app"
+   }
+  ]
+ },
+ "/nurse/patients": {
+  "artboard": "Nurse-Patient",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": []
+ },
+ "/nurse/messages": {
+  "artboard": "Nurse-Messages",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Quick reply",
+    "query": "step=quick-reply"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Sent",
+    "query": "step=sent"
+   },
+   {
+    "name": "Seen by patient",
+    "query": "step=seen-by-patient"
+   },
+   {
+    "name": "Not sent",
+    "query": "step=not-sent"
+   },
+   {
+    "name": "Patient typing",
+    "query": "step=patient-typing"
+   }
+  ]
+ },
+ "/nurse/requests": {
+  "artboard": "Nurse-Requests",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Approve: confirm",
+    "query": "step=approve-confirm"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Approved",
+    "query": "step=approved"
+   },
+   {
+    "name": "Offer another time",
+    "query": "step=offer-another-time"
+   },
+   {
+    "name": "Other time sent",
+    "query": "step=other-time-sent"
+   },
+   {
+    "name": "Decline: reason needed",
+    "query": "step=decline-reason-needed"
+   },
+   {
+    "name": "Declined",
+    "query": "step=declined"
+   }
+  ]
+ },
+ "/nurse/alerts": {
+  "artboard": "Nurse-Alerts",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Acknowledging",
+    "query": "step=acknowledging"
+   },
+   {
+    "name": "Acknowledged",
+    "query": "step=acknowledged"
+   },
+   {
+    "name": "Calling",
+    "query": "step=calling"
+   },
+   {
+    "name": "Tell the doctor",
+    "query": "step=tell-the-doctor"
+   },
+   {
+    "name": "Sent to the doctor",
+    "query": "step=sent-to-the-doctor"
+   }
+  ]
+ },
+ "/nurse/updates": {
+  "artboard": "Nurse-Updates",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Review recipients",
+    "query": "step=review-recipients"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Sent",
+    "query": "step=sent"
+   },
+   {
+    "name": "Some not delivered",
+    "query": "step=some-not-delivered"
+   }
+  ]
+ }
+};
+  var variantSel = document.getElementById('variant-patient');
+  function routeOnShow() {
+    try {
+      return frameOf(visible()[0]).contentWindow.location.hash.slice(1).split('?')[0];
+    } catch (e) { return ''; }
+  }
+  function fillVariants() {
+    var route = routeOnShow();
+    if (variantSel.dataset.route === route) return;
+    variantSel.dataset.route = route;
+    var v = VARIANTS[route];
+    var html = '<option value="">Screen state / step…</option>';
+    if (v) {
+      html += '<option value="?">Normal</option>';
+      [['Screen state', v.states], ['Steps', v.steps]].forEach(function (g) {
+        if (!g[1].length) return;
+        html += '<optgroup label="' + g[0] + '">' + g[1].map(function (o) {
+          return '<option value="?' + o.query + '">' + o.name + '</option>';
+        }).join('') + '</optgroup>';
+      });
+    }
+    variantSel.innerHTML = html;
+    variantSel.disabled = !v;
+  }
+  variantSel.addEventListener('change', function (e) {
+    var q = e.target.value;
+    var route = variantSel.dataset.route;
+    if (q && route) {
+      visible().forEach(function (kind) { go(kind, route + (q === '?' ? '' : q)); });
+    }
+    e.target.value = '';
+  });
+  setInterval(function () { if (state.product === 'patient') fillVariants(); }, 800);
   document.getElementById('restart').addEventListener('click', function () {
     visible().forEach(function (kind) {
       frameOf(kind).src = url(kind, START[DEVICES[kind].product], true);
