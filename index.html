@@ -102,7 +102,7 @@
   /* Product tabs */
   .products {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
   }
   .product {
@@ -352,7 +352,7 @@
   footer p { margin: 0; max-width: 80ch; }
 
   @media (max-width: 720px) {
-    .products { grid-template-columns: 1fr; }
+    .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .product span { display: none; }
     .rail { gap: 10px 12px; }
     .rail .push { margin-left: 0; width: 100%; }
@@ -372,7 +372,7 @@
     <div>
       <p class="eyebrow"><span class="secret">Confidential</span> Interactive preview · Cebu</p>
       <h1>Life Link</h1>
-      <p class="lede">The patient app, the staff web app and the public website, running in your browser on sample data.</p>
+      <p class="lede">The patient app, the nurse app, the staff web app and the public website, running in your browser on sample data.</p>
     </div>
     <div class="credit" aria-label="Built by GEOTECH">
       <small>Built by</small>
@@ -382,7 +382,10 @@
 
   <div class="products" role="tablist" aria-label="Product">
     <button type="button" class="product" role="tab" id="tab-patient" data-product="patient" aria-selected="true" aria-controls="stage">
-      <b>Patient app</b><span>iPhone and iPad · English, Filipino, Bisaya · nurse side</span>
+      <b>Patient app</b><span>iPhone and iPad · English, Filipino, Bisaya</span>
+    </button>
+    <button type="button" class="product" role="tab" id="tab-nurse" data-product="nurse" aria-selected="false" aria-controls="stage">
+      <b>Nurse app</b><span>iPad and phone · shift, readings, requests, alerts</span>
     </button>
     <button type="button" class="product" role="tab" id="tab-staff" data-product="staff" aria-selected="false" aria-controls="stage">
       <b>Staff web app</b><span>Clinic, chairside, physician and partner views</span>
@@ -407,6 +410,22 @@
       <div class="seg" role="group" aria-labelledby="lbl-ipad">
         <button type="button" id="ipad-portrait" data-orient="portrait" aria-pressed="true">Portrait</button>
         <button type="button" id="ipad-landscape" data-orient="landscape" aria-pressed="false">Landscape</button>
+      </div>
+    </div>
+    <!-- Nurse app -->
+    <div class="group" data-for="nurse">
+      <span id="lbl-nshow">Show</span>
+      <div class="seg" role="group" aria-labelledby="lbl-nshow">
+        <button type="button" id="nshow-phone" data-nshow="phone" aria-pressed="false">iPhone</button>
+        <button type="button" id="nshow-tablet" data-nshow="tablet" aria-pressed="true">iPad</button>
+        <button type="button" id="nshow-both" data-nshow="both" aria-pressed="false">iPhone + iPad</button>
+      </div>
+    </div>
+    <div class="group" data-for="nurse">
+      <span id="lbl-nipad">iPad</span>
+      <div class="seg" role="group" aria-labelledby="lbl-nipad">
+        <button type="button" id="nipad-portrait" data-norient="portrait" aria-pressed="false">Portrait</button>
+        <button type="button" id="nipad-landscape" data-norient="landscape" aria-pressed="true">Landscape</button>
       </div>
     </div>
     <!-- Staff web app -->
@@ -490,7 +509,12 @@
           <option value="/me/learn">Learn and help</option>
           <option value="/me/feedback">Feedback and rights</option>
         </optgroup>
-        <optgroup label="Nurse side (best on iPad landscape)">
+      </select>
+      <select id="variant-patient" data-for="patient" data-variant aria-label="Show this screen in another state or step" disabled>
+        <option value="">Screen state / step…</option>
+      </select>
+      <select id="jump-nurse" data-for="nurse" aria-label="Go to a screen of the nurse app">
+        <option value="">Go to a screen…</option>
           <option value="/nurse/sign-in">Staff sign in</option>
           <option value="/nurse/shift">My shift</option>
           <option value="/nurse/shift/before">Before dialysis</option>
@@ -501,9 +525,8 @@
           <option value="/nurse/requests">Requests</option>
           <option value="/nurse/alerts">Alerts</option>
           <option value="/nurse/updates">Updates to patients</option>
-        </optgroup>
       </select>
-      <select id="variant-patient" data-for="patient" data-variant aria-label="Show this screen in another state or step" disabled>
+      <select id="variant-nurse" data-for="nurse" data-variant aria-label="Show this screen in another state or step" disabled>
         <option value="">Screen state / step…</option>
       </select>
       <select id="jump-staff" data-for="staff" aria-label="Go to a page of the staff web app">
@@ -621,6 +644,48 @@
       <figcaption id="tablet-cap">iPad · 820 × 1180</figcaption>
     </figure>
 
+    <!-- Nurse app -->
+    <figure class="device phone" id="dev-nurse-phone" data-product="nurse">
+      <div class="fit">
+        <div class="frame">
+          <div class="screen">
+            <div class="boot"><strong>Life Link</strong><span>Opening the nurse app…</span></div>
+            <iframe title="Life Link nurse app on iPhone" allow="autoplay; fullscreen"></iframe>
+            <div class="status">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8 .6C5.2.6 2.7 1.7.8 3.5L2 4.7a8.5 8.5 0 0 1 6-2.4Zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.2-1.2A6.9 6.9 0 0 0 8 4c-1.9 0-3.5.7-4.8 1.9l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Zm0 3.3c-.6 0-1.2.2-1.6.6L8 11.2l1.6-1.6c-.4-.4-1-.6-1.6-.6Z"/></svg>
+                <svg width="27" height="13" viewBox="0 0 27 13" aria-hidden="true"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2Z" opacity=".4"/></svg>
+              </span>
+            </div>
+            <div class="island"></div>
+            <div class="homebar"></div>          </div>
+        </div>
+      </div>
+      <figcaption>iPhone · 390 × 844</figcaption>
+    </figure>
+
+    <figure class="device tablet" id="dev-nurse-tablet" data-product="nurse">
+      <div class="fit">
+        <div class="frame">
+          <div class="screen">
+            <div class="boot"><strong>Life Link</strong><span>Opening the nurse app…</span></div>
+            <iframe title="Life Link nurse app on iPad" allow="autoplay; fullscreen"></iframe>
+            <div class="status">
+              <span>9:41 AM&nbsp;&nbsp;Wed Oct 28</span>
+              <span class="icons">
+                <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8 .6C5.2.6 2.7 1.7.8 3.5L2 4.7a8.5 8.5 0 0 1 6-2.4Zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.2-1.2A6.9 6.9 0 0 0 8 4c-1.9 0-3.5.7-4.8 1.9l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Zm0 3.3c-.6 0-1.2.2-1.6.6L8 11.2l1.6-1.6c-.4-.4-1-.6-1.6-.6Z"/></svg>
+                <span>100%</span>
+                <svg width="27" height="13" viewBox="0 0 27 13" aria-hidden="true"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2Z" opacity=".4"/></svg>
+              </span>
+            </div>
+            <div class="homebar"></div>          </div>
+        </div>
+      </div>
+      <figcaption id="nurse-tablet-cap">iPad · 820 × 1180</figcaption>
+    </figure>
+
     <!-- Staff web app -->
     <figure class="device browser" id="dev-staff" data-product="staff">
       <div class="fit">
@@ -688,23 +753,26 @@
   //   app/     patient app (Flutter web, hash routes, ?inset=<top>,<bottom>)
   //   portal/  staff web app (Next.js export, basePath /portal)
   //   site/    public website (Next.js export, basePath /site)
-  var START = { patient: '/setup/language', staff: '/staff/today', website: '/' };
+  var START = { patient: '/setup/language', nurse: '/nurse/sign-in', staff: '/staff/today', website: '/' };
   var BASE = { staff: 'portal', website: 'site' };
   var STAFF_SIZES = { desktop: [1440, 900, 'Desktop'], tablet: [1180, 820, 'Tablet'] };
   var HINTS = {
     patient: '<b>Click</b> to tap, <b>drag</b> to swipe, <b>scroll</b> to move down a page. Each device keeps its own place, and "Go to a screen" moves both. Change the language or text size inside the app, under Me.',
+    nurse: '<b>Click</b> to tap. The nurse app is made for the clinic iPad (landscape); the phone shows the same screens rearranged. Sign in with Face ID, or try the PIN 483126. "Screen state / step" shows each screen loading, empty, offline or mid-action.',
     staff: '<b>Click</b> through the sidebar like a staff member would. Pages open on the Cebu clinic\'s sample day.',
     website: '<b>Click</b> through the site and try the forms; they answer with a sample reference number and send nothing.'
   };
   var DEVICES = {
     phone: { el: document.getElementById('dev-phone'), product: 'patient', w: 390, h: 844, pad: 14, inset: '47,34' },
     tablet: { el: document.getElementById('dev-tablet'), product: 'patient', w: 820, h: 1180, pad: 22, inset: '24,20' },
+    nursePhone: { el: document.getElementById('dev-nurse-phone'), product: 'nurse', w: 390, h: 844, pad: 14, inset: '47,34' },
+    nurseTablet: { el: document.getElementById('dev-nurse-tablet'), product: 'nurse', w: 820, h: 1180, pad: 22, inset: '24,20' },
     staff: { el: document.getElementById('dev-staff'), product: 'staff', w: 1440, h: 900, chrome: 44 },
     site: { el: document.getElementById('dev-site'), product: 'website', w: 1440, h: 900, chrome: 44 },
     sitePhone: { el: document.getElementById('dev-site-phone'), product: 'website', w: 390, h: 844, pad: 14 }
   };
   var narrow = window.matchMedia('(max-width: 720px)').matches;
-  var state = { product: 'patient', show: 'phone', landscape: false, staff: 'desktop', site: 'desktop', size: 'fit' };
+  var state = { product: 'patient', show: 'phone', landscape: false, nshow: 'tablet', nlandscape: true, staff: 'desktop', site: 'desktop', size: 'fit' };
 
   function store(key, value) {
     try { localStorage.setItem('lifelink-preview-' + key, value); } catch (e) {}
@@ -714,16 +782,18 @@
   }
   if (/^(both|phone|tablet)$/.test(recall('show') || '')) state.show = recall('show');
   if (recall('landscape') === '1') state.landscape = true;
+  if (/^(both|phone|tablet)$/.test(recall('nshow') || '')) state.nshow = recall('nshow');
+  if (recall('nlandscape') === '0') state.nlandscape = false;
   if (/^(desktop|tablet)$/.test(recall('staff') || '')) state.staff = recall('staff');
   if (/^(desktop|phone|both)$/.test(recall('site') || '')) state.site = recall('site');
   if (recall('size') === 'full') state.size = 'full';
-  if (/^(patient|staff|website)$/.test(location.hash.slice(1))) state.product = location.hash.slice(1);
-  if (narrow) { state.show = state.show === 'tablet' ? 'tablet' : 'phone'; state.site = state.site === 'desktop' ? 'desktop' : 'phone'; }
+  if (/^(patient|nurse|staff|website)$/.test(location.hash.slice(1))) state.product = location.hash.slice(1);
+  if (narrow) { state.nshow = state.nshow === 'phone' ? 'phone' : 'tablet'; state.show = state.show === 'tablet' ? 'tablet' : 'phone'; state.site = state.site === 'desktop' ? 'desktop' : 'phone'; }
 
   function frameOf(kind) { return DEVICES[kind].el.querySelector('iframe'); }
   function url(kind, route, fresh) {
     var d = DEVICES[kind];
-    if (d.product === 'patient') {
+    if (d.product === 'patient' || d.product === 'nurse') {
       return 'app/index.html?inset=' + d.inset + (fresh ? '&r=' + Date.now() : '') + '#' + route;
     }
     // Pages are opened by file: …/route/index.html.
@@ -732,6 +802,9 @@
   }
   function visible() {
     if (state.product === 'patient') return state.show === 'both' ? ['phone', 'tablet'] : [state.show];
+    if (state.product === 'nurse') {
+      return state.nshow === 'both' ? ['nursePhone', 'nurseTablet'] : [state.nshow === 'phone' ? 'nursePhone' : 'nurseTablet'];
+    }
     if (state.product === 'staff') return ['staff'];
     return state.site === 'both' ? ['site', 'sitePhone'] : [state.site === 'phone' ? 'sitePhone' : 'site'];
   }
@@ -746,7 +819,7 @@
   function go(kind, route) {
     if (boot(kind, route)) return;
     var f = frameOf(kind);
-    if (DEVICES[kind].product === 'patient') {
+    if (DEVICES[kind].product === 'patient' || DEVICES[kind].product === 'nurse') {
       try { f.contentWindow.location.hash = route; return; } catch (e) {}
     }
     f.src = url(kind, route);
@@ -755,6 +828,7 @@
   function screenSize(kind) {
     var d = DEVICES[kind];
     if (kind === 'tablet' && state.landscape) return { w: d.h, h: d.w };
+    if (kind === 'nurseTablet' && state.nlandscape) return { w: d.h, h: d.w };
     if (kind === 'staff') { var s = STAFF_SIZES[state.staff]; return { w: s[0], h: s[1] }; }
     return { w: d.w, h: d.h };
   }
@@ -805,8 +879,18 @@
       b.setAttribute('aria-selected', String(b.dataset.product === state.product));
     });
     document.querySelectorAll('[data-for]').forEach(function (el) {
-      el.hidden = el.dataset.for !== state.product;
+      el.hidden = el.dataset.for.split(' ').indexOf(state.product) < 0;
     });
+    document.querySelectorAll('[data-nshow]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.nshow === state.nshow));
+    });
+    document.querySelectorAll('[data-norient]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String((b.dataset.norient === 'landscape') === state.nlandscape));
+      b.disabled = state.nshow === 'phone';
+    });
+    DEVICES.nurseTablet.el.classList.toggle('landscape', state.nlandscape);
+    document.getElementById('nurse-tablet-cap').textContent =
+      state.nlandscape ? 'iPad · 1180 × 820' : 'iPad · 820 × 1180';
     document.querySelectorAll('[data-show]').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.dataset.show === state.show));
     });
@@ -857,21 +941,24 @@
   });
   window.addEventListener('hashchange', function () {
     var p = location.hash.slice(1);
-    if (/^(patient|staff|website)$/.test(p) && p !== state.product) { state.product = p; render(); }
+    if (/^(patient|nurse|staff|website)$/.test(p) && p !== state.product) { state.product = p; render(); }
   });
   function bindSeg(attr, key, persist) {
     document.querySelectorAll('[data-' + attr + ']').forEach(function (b) {
       if (b.getAttribute('role') === 'tab') return;
       b.addEventListener('click', function () {
         var v = b.dataset[attr];
-        state[key] = key === 'landscape' ? v === 'landscape' : v;
-        store(persist, key === 'landscape' ? (state.landscape ? '1' : '0') : v);
+        var flag = key === 'landscape' || key === 'nlandscape';
+        state[key] = flag ? v === 'landscape' : v;
+        store(persist, flag ? (state[key] ? '1' : '0') : v);
         render();
       });
     });
   }
   bindSeg('show', 'show', 'show');
   bindSeg('orient', 'landscape', 'landscape');
+  bindSeg('nshow', 'nshow', 'nshow');
+  bindSeg('norient', 'nlandscape', 'nlandscape');
   bindSeg('staff', 'staff', 'staff');
   bindSeg('site', 'site', 'site');
   bindSeg('size', 'size', 'size');
@@ -2442,12 +2529,16 @@
  }
 };
   var variantSel = document.getElementById('variant-patient');
+  function variantFor() {
+    return document.getElementById('variant-' + state.product) || variantSel;
+  }
   function routeOnShow() {
     try {
       return frameOf(visible()[0]).contentWindow.location.hash.slice(1).split('?')[0];
     } catch (e) { return ''; }
   }
   function fillVariants() {
+    var variantSel = variantFor();
     var route = routeOnShow();
     if (variantSel.dataset.route === route) return;
     variantSel.dataset.route = route;
@@ -2465,15 +2556,21 @@
     variantSel.innerHTML = html;
     variantSel.disabled = !v;
   }
-  variantSel.addEventListener('change', function (e) {
+  function onVariant(e) {
+    var variantSel = e.target;
     var q = e.target.value;
     var route = variantSel.dataset.route;
     if (q && route) {
       visible().forEach(function (kind) { go(kind, route + (q === '?' ? '' : q)); });
     }
     e.target.value = '';
+  }
+  document.querySelectorAll('select[data-variant]').forEach(function (sel) {
+    sel.addEventListener('change', onVariant);
   });
-  setInterval(function () { if (state.product === 'patient') fillVariants(); }, 800);
+  setInterval(function () {
+    if (state.product === 'patient' || state.product === 'nurse') fillVariants();
+  }, 800);
   document.getElementById('restart').addEventListener('click', function () {
     visible().forEach(function (kind) {
       frameOf(kind).src = url(kind, START[DEVICES[kind].product], true);
