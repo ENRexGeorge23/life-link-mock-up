@@ -515,16 +515,27 @@
       </select>
       <select id="jump-nurse" data-for="nurse" aria-label="Go to a screen of the nurse app">
         <option value="">Go to a screen…</option>
+        <optgroup label="Start and end">
           <option value="/nurse/sign-in">Staff sign in</option>
+          <option value="/nurse/shift/handover">Hand over the shift</option>
+          <option value="/nurse/me">Me (profile, PIN, sign out)</option>
+        </optgroup>
+        <optgroup label="Chairside">
           <option value="/nurse/shift">My shift</option>
           <option value="/nurse/shift/before">Before dialysis</option>
           <option value="/nurse/shift/during">During dialysis (vitals)</option>
           <option value="/nurse/shift/after">After dialysis</option>
-          <option value="/nurse/patients">Patient chart</option>
+        </optgroup>
+        <optgroup label="Patients">
+          <option value="/nurse/patients">Patients</option>
+          <option value="/nurse/patients/chart">Patient chart</option>
+        </optgroup>
+        <optgroup label="Patient app requests">
           <option value="/nurse/messages">Messages</option>
           <option value="/nurse/requests">Requests</option>
           <option value="/nurse/alerts">Alerts</option>
           <option value="/nurse/updates">Updates to patients</option>
+        </optgroup>
       </select>
       <select id="variant-nurse" data-for="nurse" data-variant aria-label="Show this screen in another state or step" disabled>
         <option value="">Screen state / step…</option>
@@ -2249,7 +2260,20 @@
     "query": "state=offline"
    }
   ],
-  "steps": []
+  "steps": [
+   {
+    "name": "Missing check",
+    "query": "step=missing-check"
+   },
+   {
+    "name": "Starting",
+    "query": "step=starting"
+   },
+   {
+    "name": "Started",
+    "query": "step=started"
+   }
+  ]
  },
  "/nurse/shift/during": {
   "artboard": "Nurse-During",
@@ -2325,7 +2349,73 @@
    }
   ]
  },
+ "/nurse/shift/handover": {
+  "artboard": "Nurse-Handover",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Missing",
+    "query": "step=missing"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Handed over",
+    "query": "step=handed-over"
+   }
+  ]
+ },
  "/nurse/patients": {
+  "artboard": "Nurse-Patients",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Empty",
+    "query": "state=empty"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Searching",
+    "query": "step=searching"
+   },
+   {
+    "name": "No match",
+    "query": "step=no-match"
+   }
+  ]
+ },
+ "/nurse/patients/chart": {
   "artboard": "Nurse-Patient",
   "states": [
    {
@@ -2345,7 +2435,16 @@
     "query": "state=offline"
    }
   ],
-  "steps": []
+  "steps": [
+   {
+    "name": "Calling",
+    "query": "step=calling"
+   },
+   {
+    "name": "Call saved",
+    "query": "step=call-saved"
+   }
+  ]
  },
  "/nurse/messages": {
   "artboard": "Nurse-Messages",
@@ -2524,6 +2623,61 @@
    {
     "name": "Some not delivered",
     "query": "step=some-not-delivered"
+   }
+  ]
+ },
+ "/nurse/me": {
+  "artboard": "Nurse-Me",
+  "states": [
+   {
+    "name": "Loading",
+    "query": "state=loading"
+   },
+   {
+    "name": "Error",
+    "query": "state=error"
+   },
+   {
+    "name": "Offline",
+    "query": "state=offline"
+   }
+  ],
+  "steps": [
+   {
+    "name": "Enter current PIN",
+    "query": "step=enter-current-pin"
+   },
+   {
+    "name": "New PIN",
+    "query": "step=new-pin"
+   },
+   {
+    "name": "PINs do not match",
+    "query": "step=pins-do-not-match"
+   },
+   {
+    "name": "PIN saved",
+    "query": "step=pin-saved"
+   },
+   {
+    "name": "2 readings waiting",
+    "query": "step=2-readings-waiting"
+   },
+   {
+    "name": "Sending",
+    "query": "step=sending"
+   },
+   {
+    "name": "Sent",
+    "query": "step=sent"
+   },
+   {
+    "name": "Send failed",
+    "query": "step=send-failed"
+   },
+   {
+    "name": "Sign out: readings waiting",
+    "query": "step=sign-out-readings-waiting"
    }
   ]
  }
